@@ -7,7 +7,7 @@
 </jsp:include>
 <body>
 <h1>Coupons</h1>
-<table>
+<table border="2px">
     <thead>
     <tr>
         <th>ID</th>
