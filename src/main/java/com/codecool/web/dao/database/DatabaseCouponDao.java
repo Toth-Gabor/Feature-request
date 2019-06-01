@@ -16,7 +16,7 @@ public final class DatabaseCouponDao extends AbstractDao implements CouponDao {
     @Override
     public List<Coupon> findAll() throws SQLException {
         List<Coupon> coupons = new ArrayList<>();
-        String sql = "SELECT id, user_id, name, user_id, percentage FROM coupons";
+        String sql = "SELECT id, user_id, name, percentage FROM coupons";
         try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
             while (resultSet.next()) {
@@ -29,7 +29,7 @@ public final class DatabaseCouponDao extends AbstractDao implements CouponDao {
     @Override
     public List<Coupon> findAllByUserId(int userId) throws SQLException {
         List<Coupon> coupons = new ArrayList<>();
-        String sql = "SELECT id, user_id, name, user_id, percentage FROM coupons where user_id = ?";
+        String sql = "SELECT id, user_id, name, percentage FROM coupons where user_id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, userId);
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -40,6 +40,22 @@ public final class DatabaseCouponDao extends AbstractDao implements CouponDao {
         }
         return coupons;
     }
+    
+    @Override
+    public List<Coupon> findAllByShopId(int shopId) throws SQLException {
+        List<Coupon> coupons = new ArrayList<>();
+        String sql = "SELECT id, user_id, name, percentage FROM coupons "
+                    +"INNER JOIN coupons_shops ON coupons.id = coupons_shops.coupon_id "
+                    +"WHERE shop_id = ?;";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, shopId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    coupons.add(fetchCoupon(resultSet));
+                }
+            }
+        }
+        return coupons;    }
     
     @Override
     public Coupon findById(int id) throws SQLException {
