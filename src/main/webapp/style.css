@@ -6,3 +6,6 @@
     color: blue;
 }
 
+th, td {
+    padding: auto;
+}
