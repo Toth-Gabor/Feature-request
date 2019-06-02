@@ -11,7 +11,7 @@ public interface CouponDao {
     
     List<Coupon> findAllByUserId(int userId) throws SQLException;
     
-    List<Coupon> findAllByShopId(int shopId) throws  SQLException;
+    List<Coupon> findAllByShopIdAndUserId(int shopId, int userId) throws  SQLException;
 
     Coupon findById(int id) throws SQLException;
 

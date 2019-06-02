@@ -6,6 +6,7 @@ import com.codecool.web.dao.database.DatabaseCouponDao;
 import com.codecool.web.dao.database.DatabaseShopDao;
 import com.codecool.web.model.Coupon;
 import com.codecool.web.model.Shop;
+import com.codecool.web.model.User;
 import com.codecool.web.service.CouponService;
 import com.codecool.web.service.ShopService;
 import com.codecool.web.service.exception.ServiceException;
@@ -28,13 +29,13 @@ public final class ShopServlet extends AbstractServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try (Connection connection = getConnection(req.getServletContext())) {
             String id = req.getParameter("id");
-    
+            User user = (User) req.getSession().getAttribute("user");
             ShopDao shopDao = new DatabaseShopDao(connection);
             ShopService shopService = new SimpleShopService(shopDao);
             
             CouponDao couponDao = new DatabaseCouponDao(connection);
             CouponService couponService = new SimpleCouponService(couponDao, shopDao);
-            List<Coupon> coupons = couponService.getCouponsByShopId(id);
+            List<Coupon> coupons = couponService.getCouponsByShopIdAndUserId(id, user.getId());
 
             Shop shop = shopService.getShop(id);
             req.setAttribute("shop", shop);
